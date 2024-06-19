@@ -37,3 +37,8 @@ app.post('/clip', (req, res) => {
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
+
+
+app.get('/', (req, res) => {
+  res.send('Welcome to the Video Editor API');
+});
