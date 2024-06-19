@@ -1,7 +1,6 @@
 const express = require('express');
 const ffmpeg = require('fluent-ffmpeg');
 const path = require('path');
-const fs = require('fs');
 
 const app = express();
 const port = 3000;
@@ -22,6 +21,12 @@ function getVideoDuration(filePath) {
   });
 }
 
+// Function to convert time format to seconds
+function timeToSeconds(time) {
+  const parts = time.split(':');
+  return parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseFloat(parts[2]);
+}
+
 // Endpoint to clip a video
 app.post('/clip', async (req, res) => {
   const { startTime, endTime, duration, inputFile, outputFile } = req.body;
@@ -36,42 +41,38 @@ app.post('/clip', async (req, res) => {
   try {
     const videoDuration = await getVideoDuration(inputPath);
 
+    const start = startTime ? timeToSeconds(startTime) : null;
+    const end = endTime ? timeToSeconds(endTime) : null;
+    const dur = duration ? parseFloat(duration) : null;
+
+    if (start !== null && start >= videoDuration) {
+      return res.status(400).send('Start time is out of bounds');
+    }
+
+    if (dur !== null && (start + dur > videoDuration)) {
+      return res.status(400).send('Duration is out of bounds');
+    }
+
+    if (start !== null && end !== null && (start >= end || end > videoDuration)) {
+      return res.status(400).send('Start time or end time is out of bounds');
+    }
+
     if (duration) {
-      if (startTime) {
-        const start = parseFloat(startTime);
-        const dur = parseFloat(duration);
-
-        if (start < 0 || start + dur > videoDuration) {
-          return res.status(400).send('Start time or duration is out of bounds');
-        }
-
-        ffmpeg(inputPath)
-          .setStartTime(startTime)
-          .setDuration(duration)
-          .output(outputPath)
-          .on('end', () => {
-            res.send(`Video clipped successfully: ${outputFile}`);
-          })
-          .on('error', (err) => {
-            res.status(500).send(`Error clipping video: ${err.message}`);
-          })
-          .run();
-      } else {
-        return res.status(400).send('Start time is required when duration is provided');
-      }
-    } else if (startTime && endTime) {
-      const start = parseFloat(startTime);
-      const end = parseFloat(endTime);
-
-      if (start < 0 || end > videoDuration || start >= end) {
-        return res.status(400).send('Start time or end time is out of bounds');
-      }
-
-      const dur = end - start;
-
       ffmpeg(inputPath)
         .setStartTime(startTime)
-        .setDuration(dur)
+        .setDuration(duration)
+        .output(outputPath)
+        .on('end', () => {
+          res.send(`Video clipped successfully: ${outputFile}`);
+        })
+        .on('error', (err) => {
+          res.status(500).send(`Error clipping video: ${err.message}`);
+        })
+        .run();
+    } else if (startTime && endTime) {
+      ffmpeg(inputPath)
+        .setStartTime(startTime)
+        .setDuration(end - start)
         .output(outputPath)
         .on('end', () => {
           res.send(`Video clipped successfully: ${outputFile}`);

@@ -26,3 +26,22 @@ video-editor/
 Run this to run the application
 
 ```node index.js```
+
+
+
+CLIP 
+in ```clip.js```
+
+API used to clip the video
+
+1. ```POST http://localhost:3000/clip```
+2. ```Header Content-Type application/json```
+3. ```Body json 
+{
+  "startTime": "00:00:10",
+  "duration": 13,
+  "endTime": "00:00:20",
+  "inputFile": "input.mp4",
+  "outputFile": "output_check1.mp4"
+}
+```
