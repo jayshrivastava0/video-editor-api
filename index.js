@@ -1,7 +1,8 @@
+process.env.PATH = process.env.PATH + ';D:\\ffmpeg-master-latest-win64-gpl\\bin';
+
 const express = require('express');
 const ffmpeg = require('fluent-ffmpeg');
 const path = require('path');
-const fs = require('fs');
 
 const app = express();
 const port = 3000;
@@ -33,12 +34,12 @@ app.post('/clip', (req, res) => {
     .run();
 });
 
+// Root endpoint
+app.get('/', (req, res) => {
+  res.send('Welcome to the Video Editor API');
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
-});
-
-
-app.get('/', (req, res) => {
-  res.send('Welcome to the Video Editor API');
 });
