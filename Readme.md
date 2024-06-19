@@ -29,7 +29,9 @@ Run this to run the application
 
 
 
-CLIP 
+
+The clip.js in the main folder is for handling the functionality of clip
+
 in ```clip.js```
 
 POST http://localhost:3000/clip
