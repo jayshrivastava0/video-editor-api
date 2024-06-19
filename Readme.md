@@ -32,11 +32,15 @@ Run this to run the application
 CLIP 
 in ```clip.js```
 
-API used to clip the video
-
-1. ```POST http://localhost:3000/clip```
-2. ```Header Content-Type application/json```
-3. ```Body json 
+```
+# API used to clip the video
+```
+POST http://localhost:3000/clip
+```
+Header Content-Type: application/json
+```
+Body json
+```json
 {
   "startTime": "00:00:10",
   "duration": 13,
@@ -44,4 +48,34 @@ API used to clip the video
   "inputFile": "input.mp4",
   "outputFile": "output_check1.mp4"
 }
+```
+```
+
+### Explanation
+
+1. **Triple Backticks for Code Block**: Use three backticks (```) to open and close the code block.
+2. **Syntax Highlighting**: Add the language identifier (e.g., `json`) immediately after the opening backticks for syntax highlighting.
+
+In your Markdown file, it will look like this:
+
+```markdown
+# API used to clip the video
+
+```http
+POST http://localhost:3000/clip
+```
+
+```http
+Header Content-Type: application/json
+```
+
+```json
+{
+  "startTime": "00:00:10",
+  "duration": 13,
+  "endTime": "00:00:20",
+  "inputFile": "input.mp4",
+  "outputFile": "output_check1.mp4"
+}
+```
 ```
