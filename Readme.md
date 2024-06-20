@@ -9,6 +9,15 @@ Paid
 
 
 
+Requirements
+1. Node.js
+2. Express
+3. Fluent-ffmpeg
+4. npm
+5. opencv-python
+
+
+
 In main folder
 
 1. ```npm init -y```
@@ -32,7 +41,7 @@ Run this to run the application
 
 The clip.js in the main folder is for handling the functionality of clip
 
-in ```clip.js```
+in ```clip.js``` mppeg library was used was used.
 
 POST http://localhost:3000/clip
 

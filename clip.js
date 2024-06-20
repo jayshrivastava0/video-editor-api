@@ -8,7 +8,7 @@ const port = 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Helper function to get video duration
+// get video duration
 function getVideoDuration(filePath) {
   return new Promise((resolve, reject) => {
     ffmpeg.ffprobe(filePath, (err, metadata) => {
@@ -21,13 +21,13 @@ function getVideoDuration(filePath) {
   });
 }
 
-// Function to convert time format to seconds
+// time format to seconds
 function timeToSeconds(time) {
   const parts = time.split(':');
   return parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseFloat(parts[2]);
 }
 
-// Endpoint to clip a video
+// Endtimestamp to clip a video
 app.post('/clip', async (req, res) => {
   const { startTime, endTime, duration, inputFile, outputFile } = req.body;
 
