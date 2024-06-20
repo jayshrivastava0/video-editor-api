@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slow Motion Video</title>
+</head>
+<body>
+    <input type="file" id="upload" accept="video/*">
+    <video id="video" controls style="display:none;"></video>
+    <canvas id="canvas" style="display:none;"></canvas>
+    <button id="process">Process Slow Motion</button>
+    <video id="output" controls></video>
+
+    <script>
+        document.getElementById('upload').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const url = URL.createObjectURL(file);
+            const video = document.getElementById('video');
+            video.src = url;
+            video.style.display = 'block';
+        });
+
+        document.getElementById('process').addEventListener('click', function() {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const output = document.getElementById('output');
+            const context = canvas.getContext('2d');
+
+            const frameRate = 30; // Original frame rate
+            const slowFactor = 2; // Slow motion factor (2x slower)
+            const newFrameRate = frameRate / slowFactor;
+
+            video.addEventListener('loadeddata', function() {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+
+                const totalFrames = Math.floor(video.duration * frameRate);
+                let currentFrame = 0;
+
+                function drawFrame() {
+                    if (currentFrame >= totalFrames) {
+                        generateOutput();
+                        return;
+                    }
+
+                    video.currentTime = currentFrame / frameRate;
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                    setTimeout(() => {
+                        currentFrame += slowFactor;
+                        drawFrame();
+                    }, 1000 / newFrameRate);
+                }
+
+                function generateOutput() {
+                    const recordedChunks = [];
+                    const stream = canvas.captureStream(newFrameRate);
+                    const mediaRecorder = new MediaRecorder(stream);
+
+                    mediaRecorder.ondataavailable = function(event) {
+                        if (event.data.size > 0) {
+                            recordedChunks.push(event.data);
+                        }
+                    };
+
+                    mediaRecorder.onstop = function() {
+                        const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                        const url = URL.createObjectURL(blob);
+                        output.src = url;
+                        output.style.display = 'block';
+                    };
+
+                    mediaRecorder.start();
+                    setTimeout(() => mediaRecorder.stop(), video.duration * 1000 * slowFactor);
+                }
+
+                drawFrame();
+            });
+        });
+    </script>
+</body>
+</html>
