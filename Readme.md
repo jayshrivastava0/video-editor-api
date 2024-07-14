@@ -2,6 +2,12 @@
 
 This repository contains a simple video editor API that allows users to upload videos and clip them according to specified start and end times or duration. The API supports multiple video formats and ensures that inputs are validated to prevent errors. Additionally, it includes a script to create slow-motion videos.
 
+## Functionalities Offered
+
+1. [**Clipping**](https://github.com/jayshrivastava0/video-editing/blob/512c2f8800cff68da28ccfc3640de8fa2cb88df7/Readme.md#L75-L76): Clip videos according to specified start and end times or duration.
+2. [**Slow Motion**](https://github.com/jayshrivastava0/video-editing/blob/512c2f8800cff68da28ccfc3640de8fa2cb88df7/Readme.md#L127): Apply a slow-motion effect to videos.
+3. **Remove Background (Experimental)**: Remove the background from videos (under development).
+
 ## Requirements
 
 - Node.js
