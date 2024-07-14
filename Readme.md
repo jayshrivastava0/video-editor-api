@@ -1,6 +1,6 @@
 # Video Editor API
 
-This repository contains a simple video editor API that allows users to upload videos and clip them according to specified start and end times or duration. The API supports multiple video formats and ensures that inputs are validated to prevent errors.
+This repository contains a simple video editor API that allows users to upload videos and clip them according to specified start and end times or duration. The API supports multiple video formats and ensures that inputs are validated to prevent errors. Additionally, it includes a script to create slow-motion videos.
 
 ## Requirements
 
@@ -24,6 +24,8 @@ This repository contains a simple video editor API that allows users to upload v
    ```bash
    npm init -y
    npm install express fluent-ffmpeg multer axios form-data fs path
+   npm install @ffmpeg-installer/ffmpeg
+   npm install @ffprobe-installer/ffprobe
    ```
 
 3. Make sure the file structure is like this:
@@ -32,9 +34,18 @@ This repository contains a simple video editor API that allows users to upload v
    video-editor/
    ├── clip.js
    ├── alternative_clip.js
+   ├── slow_motion.js
    ├── uploads/
+   │   ├── input.mp4
+   │   └── output.mp4
    ├── index.html
-   └── other_files
+   ├── experimental/
+   │   ├── remove-bg.py
+   │   └── test.py
+   ├── .gitignore
+   ├── package-lock.json
+   ├── package.json
+   └── Readme.md
    ```
 
 ## Usage
@@ -106,26 +117,41 @@ node clip.js
   }
   ```
 
+### Creating Slow-Motion Videos
+
+#### Script: slow_motion.js
+
+This script uses `fluent-ffmpeg` to apply a slow-motion effect to a video.
+
+**Code Explanation**:
+
+1. **Imports**:
+   - `ffmpeg` is imported to handle video processing.
+   - `path` is imported to handle file paths.
+   - `@ffmpeg-installer/ffmpeg` and `@ffprobe-installer/ffprobe` are used to set the paths for `ffmpeg` and `ffprobe`.
+
+2. **Function `createSlowMotion`**:
+   - Takes `inputVideoPath`, `outputVideoPath`, and `slowFactor` as parameters.
+   - Uses `ffmpeg` to apply the slow-motion effect by adjusting the PTS (Presentation Time Stamp) of the video frames.
+   - Adjusts the frame rate to match the slow-motion effect.
+
+3. **Example Usage**:
+   - Defines the input and output video paths.
+   - Defines the slow-motion factor.
+   - Calls the `createSlowMotion` function with these parameters.
+
+### Experimental Scripts
+
+The `experimental/` directory contains scripts that are still under development and may be written in different languages.
+
 ### File Structure
 
 - `clip.js`: Handles video clipping functionality using Fluent-ffmpeg.
 - `alternative_clip.js`: Alternative implementation using `api.video`.
+- `slow_motion.js`: Script to create slow-motion videos using Fluent-ffmpeg.
 - `index.html`: Simple front-end to upload and process videos for slow motion.
 - `uploads/`: Directory to store uploaded and processed videos.
-
-## Functionality Overview
-
-### clip.js
-
-This file contains the core logic for handling video clipping. It uses the `fluent-ffmpeg` library to process videos. It includes functions to get video duration, convert time format to seconds, and handle the video clipping request.
-
-### alternative_clip.js
-
-An alternative implementation using `api.video` for uploading, clipping, and downloading videos. This implementation uses `multer` for handling file uploads, `axios` for making API requests, and `form-data` for handling form data.
-
-### index.html
-
-A simple HTML file to upload a video and process it to create a slow-motion effect. It uses JavaScript to capture frames from the video, adjust the playback speed, and generate the output video.
+- `experimental/`: Contains scripts that are under development and in different languages.
 
 ### Deployment
 
