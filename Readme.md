@@ -72,7 +72,10 @@ node clip.js
 
   Returns a welcome message.
 
-#### Clip a Video
+
+
+### Clip a Video
+
 
 - **POST /clip**
 
