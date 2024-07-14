@@ -74,7 +74,7 @@ node clip.js
 
 
 
-### Clip a Video
+## Clip a Video
 
 
 - **POST /clip**
@@ -126,7 +126,7 @@ node clip.js
   }
   ```
 
-### Creating Slow-Motion Videos
+## Creating Slow-Motion Videos
 
 #### Script: slow_motion.js
 
